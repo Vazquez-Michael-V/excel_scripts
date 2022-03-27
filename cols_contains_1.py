@@ -32,12 +32,14 @@ def find_contents(specified_column, substring_columns, excel_filename, results_f
         found_list = [s for x in range(len(list(df_temp_search[specified_column])))]
         big_found_list.append(found_list)
         
-        # Add Results column to allow for grouping.
-        found_col = []
-        for small_list in big_found_list:
-            for s in small_list:
-                found_col.append(s)
-        df_results['Results'] = found_col
+        
+        
+    # Add Results column to allow for grouping.
+    found_col = []
+    for small_list in big_found_list:
+        for s in small_list:
+            found_col.append(s)
+    df_results['Results'] = found_col
     
     # Clean up df_results.
     df_results = df_results.sort_values(by=[specified_column]).reset_index()
