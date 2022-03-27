@@ -1,12 +1,12 @@
 
 import pandas as pd
 
-def cols_substring(col_to_search, col_substring, cols_substring_filename, cols_substring_output_filename):
+def cols_substring(col_to_search, col_substring, cols_substring_filename, cols_substring_output_filename=None):
     """Checks if a column contains a substring from another column. \n
     'col_to_search' will be searched for substrings in 'col_substring'. \n
-    'cols_substring_filename' is the excel file to be read, and
-    'cols_substring_output_filename' is the excel file that will print the results of the
-    substring search.    
+    'cols_substring_filename' (required argument) is the excel file to be read, and
+    'cols_substring_output_filename' (optional argument) is the excel file that will print the results of the
+    substring search. If 'cols_substring_output_filename' is not specified, then no excel file will be output.   
     """
     
     df_contains = pd.read_excel(cols_substring_filename)
@@ -31,12 +31,16 @@ def cols_substring(col_to_search, col_substring, cols_substring_filename, cols_s
     
     # Clean up df_results.
     df_results = df_results.sort_values(by=[col_to_search]).reset_index(drop=True)
-    df_results = df_results.drop(columns=[col_substring])
+    df_results = df_results.drop(columns=[col_substring])    
     
-    print(df_results)
+    if cols_substring_output_filename != None:
+        with pd.ExcelWriter(cols_substring_output_filename) as writer:
+            df_results.to_excel(writer, index=False)
 
-    with pd.ExcelWriter(cols_substring_output_filename) as writer:
-        df_results.to_excel(writer, index=False)
+    return df_results
+    
         
-             
-cols_substring('Chairs', 'Search', 'contains_file.xlsx', 'excel_contains.xlsx')
+a = cols_substring('Chairs', 'Search', 'contains_file.xlsx', 'excel_contains.xlsx')
+
+print(a)
+print(type(a))
